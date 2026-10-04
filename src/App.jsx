@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header.jsx";
 import Sidebar from "./components/Sidebar.jsx";
 import Content from "./components/Content.jsx";
+import Footer from "./components/Footer"
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -63,6 +64,20 @@ function App() {
     );
     resetForm();
   };
+  const bestNote = students.reduce((acc,s)=>{
+    return Number(s.note) > acc ? Number(s.note) : acc;
+  },0)
+  const nAdmis = students.reduce((acc,s)=>{
+    return Number(s.note) >= 10 ? acc+1 : acc
+  },0)
+
+  const nRedoublants = students.reduce((acc,s)=>{
+    return Number(s.note) < 10 ? acc+1 : acc
+  },0)
+
+  const moyenneG = students.length > 0 ?  students.reduce((acc,s)=>{
+    return acc + Number(s.note)
+  },0)/students.length : 0;
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -80,8 +95,11 @@ function App() {
           onDisplay={handleDisplay}
           onDelete={handleDelete}
           onCancel={resetForm}
+          bestNote={bestNote}
         />
+        
       </div>
+      <Footer nAdmis={nAdmis} nRedoublants={nRedoublants} moyenneG={moyenneG} />
     </div>
   );
 }
